@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import Timer from './components/Timer';
+import Controls from './components/Controls';
 
 function App() {
   // Timer States
-  const [timeRemaining, setTimeRemaining] = useState(1500);
+  const [timeRemaining, setTimeRemaining] = useState(10);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionType, setSessionType] = useState('Work');
 
@@ -41,20 +42,37 @@ function App() {
     };
   }, [isRunning, sessionType, workDuration, breakDuration]);
 
+  const handleStartPause = () => {
+    setIsRunning(!isRunning);
+  }
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setTimeRemaining(sessionType === 'Work' ? workDuration * 60 : breakDuration * 60)
+  }
+
+  const handleSkip = () => {
+    const newSessionType = sessionType === 'Work' ? 'Break' : 'Work';
+    setSessionType(newSessionType);
+    setIsRunning(false)
+    setTimeRemaining(newSessionType === 'Work' ? workDuration * 60 : breakDuration * 60);
+  }
+
   return (
     <>
-      <div className='min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500'>
-        <div>
-          <button
-            onClick={() => setIsRunning(!isRunning)}
-          >
-            {isRunning ? 'Pause' : 'Start'}
-          </button>
-        </div>
-        <Timer
+      <div className='flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800'>
+        <div className='flex flex-col justify-center items-center bg-slate-800/60 backdrop-blur-xl border border-slate-700 p-5 rounded-2xl h-124 w-120'>
+          <Timer
           time={formatTime(timeRemaining)}
           sessionType={sessionType}
         />
+        <Controls
+          isRunning={isRunning}
+          onStartPause={handleStartPause}
+          onReset={handleReset}
+          onSkip={handleSkip}
+        />
+        </div>
       </div>
     </>
   )
