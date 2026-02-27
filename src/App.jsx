@@ -4,7 +4,7 @@ import Controls from './components/Controls';
 
 function App() {
   // Timer States
-  const [timeRemaining, setTimeRemaining] = useState(10);
+  const [timeRemaining, setTimeRemaining] = useState(1500);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionType, setSessionType] = useState('Work');
 
@@ -39,7 +39,7 @@ function App() {
       }, 1000);
 
       return () => clearInterval(interval);
-    };
+    }
   }, [isRunning, sessionType, workDuration, breakDuration]);
 
   const handleStartPause = () => {
@@ -59,10 +59,9 @@ function App() {
   }
 
   return (
-    <>
-      <div className='flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800'>
-        <div className='flex flex-col justify-center items-center bg-slate-800/60 backdrop-blur-xl border border-slate-700 p-5 rounded-2xl h-124 w-120'>
-          <Timer
+    <div className='flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 overflow-x-hidden p-4'>
+      <div className='flex flex-col justify-center items-center bg-slate-800/60 backdrop-blur-xl border border-slate-700 p-6 md:p-8 lg:p-10 rounded-3xl shadow-2xl max-w-md w-full'>
+        <Timer
           time={formatTime(timeRemaining)}
           sessionType={sessionType}
         />
@@ -72,9 +71,8 @@ function App() {
           onReset={handleReset}
           onSkip={handleSkip}
         />
-        </div>
       </div>
-    </>
+    </div>
   )
 }
 
