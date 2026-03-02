@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Timer from './components/Timer';
 import Controls from './components/Controls';
 
+
 function App() {
   // Timer States
   const [timeRemaining, setTimeRemaining] = useState(1500);
@@ -29,6 +30,8 @@ function App() {
             const newSessionType = sessionType === 'Work' ? 'Break' : 'Work';
             setSessionType(newSessionType);
 
+            newSessionType === 'Work' ? workSound() : breakSound();
+
             return newSessionType === 'Work'
               ? workDuration * 60
               : breakDuration * 60;
@@ -43,19 +46,46 @@ function App() {
   }, [isRunning, sessionType, workDuration, breakDuration]);
 
   const handleStartPause = () => {
+    buttonSound();
     setIsRunning(!isRunning);
   }
 
   const handleReset = () => {
+    buttonSound();
     setIsRunning(false);
     setTimeRemaining(sessionType === 'Work' ? workDuration * 60 : breakDuration * 60)
   }
 
   const handleSkip = () => {
+    buttonSound();
     const newSessionType = sessionType === 'Work' ? 'Break' : 'Work';
     setSessionType(newSessionType);
     setIsRunning(false)
     setTimeRemaining(newSessionType === 'Work' ? workDuration * 60 : breakDuration * 60);
+  }
+
+  const buttonSound = () => {
+    const audio = new Audio('/ButtonNoti.wav');
+    audio.volume = 0.5;
+    audio.play().catch(error => {
+      console.error('Error playing sound: ', error);
+    });
+  }
+
+  const workSound = () => {
+    const audio = new Audio('/WorkNoti.wav');
+    audio.volume = 0.5;
+    audio.play().catch(error => {
+      console.error('Error playing sound: ', error);
+    });
+  }
+
+  const breakSound = () => {
+    const audio = new Audio('/BreakNoti.wav');
+    audio.volume = 0.5;
+    audio.play().catch(error => {
+      console.error('Error playing sound: ', error);
+    });
   }
 
   return (
