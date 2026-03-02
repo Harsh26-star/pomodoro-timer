@@ -13,6 +13,13 @@ function App() {
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
 
+  const buttonAudio = new Audio('/ButtonNoti.wav');
+  buttonAudio.volume = 0.5;
+  const workAudio = new Audio('/WorkNoti.wav');
+  workAudio.volume = 0.5;
+  const breakAudio = new Audio('/BreakNoti.wav');
+  breakAudio.volume = 0.5;
+
   function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
@@ -65,25 +72,22 @@ function App() {
   }
 
   const buttonSound = () => {
-    const audio = new Audio('/ButtonNoti.wav');
-    audio.volume = 0.5;
-    audio.play().catch(error => {
+    buttonAudio.currentTime = 0;
+    buttonAudio.play().catch(error => {
       console.error('Error playing sound: ', error);
     });
   }
 
   const workSound = () => {
-    const audio = new Audio('/WorkNoti.wav');
-    audio.volume = 0.5;
-    audio.play().catch(error => {
+    workAudio.currentTime = 0;
+    workAudio.play().catch(error => {
       console.error('Error playing sound: ', error);
     });
   }
 
   const breakSound = () => {
-    const audio = new Audio('/BreakNoti.wav');
-    audio.volume = 0.5;
-    audio.play().catch(error => {
+    breakAudio.currentTime = 0;
+    breakAudio.play().catch(error => {
       console.error('Error playing sound: ', error);
     });
   }
