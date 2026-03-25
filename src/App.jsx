@@ -5,7 +5,7 @@ import Controls from './components/Controls';
 
 function App() {
   // Timer States
-  const [timeRemaining, setTimeRemaining] = useState(1500);
+  const [timeRemaining, setTimeRemaining] = useState(20);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionType, setSessionType] = useState('Work');
 
@@ -25,9 +25,12 @@ function App() {
     const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const remainingSeconds = seconds % 60;
     const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-
     return `${paddedMinutes}:${paddedSeconds}`;
   }
+
+  // Total seconds for the current session (used to compute candle %)
+  const totalSeconds = sessionType === 'Work' ? workDuration * 60 : breakDuration * 60;
+  const candlePct = timeRemaining / totalSeconds;
 
   useEffect(() => {
     if (isRunning) {
@@ -36,14 +39,11 @@ function App() {
           if (prev <= 1) {
             const newSessionType = sessionType === 'Work' ? 'Break' : 'Work';
             setSessionType(newSessionType);
-
             newSessionType === 'Work' ? workSound() : breakSound();
-
             return newSessionType === 'Work'
               ? workDuration * 60
               : breakDuration * 60;
           }
-
           return prev - 1;
         });
       }, 1000);
@@ -73,23 +73,17 @@ function App() {
 
   const buttonSound = () => {
     buttonAudio.currentTime = 0;
-    buttonAudio.play().catch(error => {
-      console.error('Error playing sound: ', error);
-    });
+    buttonAudio.play().catch(error => console.error('Error playing sound: ', error));
   }
 
   const workSound = () => {
     workAudio.currentTime = 0;
-    workAudio.play().catch(error => {
-      console.error('Error playing sound: ', error);
-    });
+    workAudio.play().catch(error => console.error('Error playing sound: ', error));
   }
 
   const breakSound = () => {
     breakAudio.currentTime = 0;
-    breakAudio.play().catch(error => {
-      console.error('Error playing sound: ', error);
-    });
+    breakAudio.play().catch(error => console.error('Error playing sound: ', error));
   }
 
   return (
@@ -98,6 +92,7 @@ function App() {
         <Timer
           time={formatTime(timeRemaining)}
           sessionType={sessionType}
+          candlePct={candlePct}
         />
         <Controls
           isRunning={isRunning}
