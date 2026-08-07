@@ -5,7 +5,7 @@ import Controls from './components/Controls';
 
 function App() {
   // Timer States
-  const [timeRemaining, setTimeRemaining] = useState(20);
+  const [timeRemaining, setTimeRemaining] = useState(1500);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionType, setSessionType] = useState('Work');
 
